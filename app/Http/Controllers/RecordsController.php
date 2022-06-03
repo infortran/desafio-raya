@@ -18,39 +18,33 @@ class RecordsController extends Controller
         return Records::with('comuna.provincia.region')->paginate();
     }
 
-    public function getRecordsByReg(){
-        if(request('region')){
-            $registros
+    public function filter(Request $request, $filter){
+
+        switch($filter){
+            case 'region':
+                if(request('region_id')){
+                    return Records::where('region_id', request('region_id'))->get();
+                }else{
+                    return response()->json(['error' => 'No encontrado'], 404);
+                }
+            default:
+                return response()->json(['error' => 'No encontrado'], 404);
+                
         }
     }
 
     public function getRecordsByRegion(){
         if(request('region')){
             //$region = Region::findOrFail(request('region'));
-            $registros = Records::with('comuna.provincia.region')->paginate(25);
-            return response()->json(['aers' => $registros]);
+            $registros = Records::all();
             $filtro = [];
-            foreach($registros['data'] as $reg){
+            foreach($registros as $reg){
                 if($reg->comuna->provincia->region->id == request('region')){
                     array_push($filtro, $reg);
                 }
                 
             }
-            return response()->json(
-                [
-                    'current_page' => $registros['current_page'],
-                    'data' => $filtro,
-                    'first_page_url' => $registros['first_page_url'],
-                    'from' => $registros['from'],
-                    'last_page' => $registros['last_page'],
-                    'links' => $registros['links'],
-                    'next_page' => $registros['next_page'],
-                    'path' => $registros['path'],
-                    'per_page' => $registros['per_page'],
-                    'prev_page_url' => $registros['prev_page_url'],
-                    'to' => $registros['to'],
-                    'total' => $registros['total']
-                    ]);
+            return response()->json($filtro);
             //tengo el id de la region
             //necesito los registros que sean de la misma region 
             //tengo que revisar las comunas de los registros

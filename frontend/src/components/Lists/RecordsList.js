@@ -1,7 +1,7 @@
 import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import useSWR from 'swr'
+
 
 
 
