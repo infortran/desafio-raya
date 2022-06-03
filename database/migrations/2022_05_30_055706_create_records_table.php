@@ -19,6 +19,7 @@ class CreateRecordsTable extends Migration
             $table->string('rut')->unique();
             $table->string('email')->unique();
             $table->integer('phone');
+            $table->date('birth');
             $table->integer('comuna_id');
             $table->timestamps();
         });

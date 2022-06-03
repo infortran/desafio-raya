@@ -42,7 +42,6 @@ class RecordsController extends Controller
                 if($reg->comuna->provincia->region->id == request('region')){
                     array_push($filtro, $reg);
                 }
-                
             }
             return response()->json($filtro);
             //tengo el id de la region
@@ -82,9 +81,9 @@ class RecordsController extends Controller
      * @param  \App\Models\Records  $records
      * @return \Illuminate\Http\Response
      */
-    public function show(Records $records)
+    public function show(Records $record)
     {
-        //
+        return response()->json(['id' => $record]);
     }
 
     /**
@@ -105,9 +104,14 @@ class RecordsController extends Controller
      * @param  \App\Models\Records  $records
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Records $records)
+    public function update(Request $request, Records $record)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required'
+        ]);
+
+        $record->update($data);
+        return response()->json(['status' => 'Registro editado correctamente'], 200);
     }
 
     /**

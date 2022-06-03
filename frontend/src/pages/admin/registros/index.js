@@ -7,7 +7,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
-const Dashboard = () => {
+const Registros = () => {
     const {user} = useAuth({middleware:'auth', subRoute:'registros'})
     const { getRecords } = useRecords()
     const [registros, setRegistros] = useState()
@@ -44,9 +44,9 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            { <RecordsList recordsData={registros} />}
+            { <RecordsList recordsData={registros} usuario={user}/>}
         </AdminLayout>
     )
 }
 
-export default Dashboard
+export default Registros

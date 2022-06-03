@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Records extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function comuna(){
         return $this->belongsTo('App\Models\Comuna');

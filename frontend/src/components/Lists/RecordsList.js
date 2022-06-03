@@ -1,14 +1,16 @@
 import axios from '@/lib/axios'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 
 
 
-export const RecordsList = ({recordsData}) => {
+export const RecordsList = ({recordsData, usuario}) => {
     const [list, setList] = useState([])
     const [hasMore, setHasMore] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
+    const router = useRouter()
 
     useEffect(() => {
         if(! list?.length ){
@@ -57,12 +59,22 @@ export const RecordsList = ({recordsData}) => {
         .map((e, i) => 
             <div key={i} className="py-1">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg">
-                        <div className="p-6 bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-900 rounded">
+                    <div className="flex justify-between bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg">
+                        <div className="p-6 bg-white dark:bg-gray-600 rounded">
                             {e.name} <br/>
                             {e.email}
                             <p>{e.comuna?.provincia.region.region}</p>
                         </div>
+                        {
+                            usuario?.role === 'admin' ?
+                            <div className="flex items-center p-4">
+                                <button className="px-4 py-2 rounded dark:bg-gray-900" onClick={()=>{
+                                    router.push(`/admin/registros/edit/${e.id}`)
+                                }}>Editar</button>
+                                <button className="text-2xl ml-3">&times;</button>
+                            </div>
+                            :''    
+                        }
                     </div>
                 </div>
             </div>

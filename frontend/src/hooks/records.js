@@ -13,17 +13,30 @@ export const useRecords = () => {
                 //router.push('/verify-email')
             }),
     )
-    const getRecords = async (url) => {
-        return await axios.get(url)
+    const getRecords = (url) => {
+        console.log('la url',url)
+        return axios.get(url)
             .then(res => res.data)
+            
             .catch(error => {
                 console.error('el errorcito',error)
+                if (error.response.status !== 409) throw error
+                
             })
     }
+
+    /*const {data:registro, error} = useSWR(`/api/records/1`, () => {
+        axios.get(`/api/records/1`)
+        .then(res => res.data)
+        .catch(err => {
+            console.log('error del swr', err)
+        })
+    })*/
     
 
     return {
         records,
-        getRecords
+        getRecords,
+        /*registro*/
     }
 }
