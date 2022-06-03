@@ -47,7 +47,7 @@ const Navigation = ({ user }) => {
                             {
                                 user && user?.role === 'admin' ?
                                 <NavLink
-                                href="usuarios"
+                                href="/admin/usuarios"
                                 active={router.pathname === '/admin/usuarios'}>
                                 Lista de usuarios
                             </NavLink>:''
@@ -131,8 +131,21 @@ const Navigation = ({ user }) => {
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
                             href="/dashboard"
-                            active={router.pathname === '/dashboard'}>
+                            active={router.pathname === (user?.role === 'admin' ? '/admin/dashboard': '/user/dashboard')}>
                             Dashboard
+                        </ResponsiveNavLink>
+                        {
+                        user?.role === 'admin' ?
+                        <ResponsiveNavLink
+                            href="/admin/usuarios"
+                            active={router.pathname === '/admin/usuarios'}>
+                            Lista de usuarios
+                        </ResponsiveNavLink> : ''
+                        }
+                        <ResponsiveNavLink
+                            href="/dashboard"
+                            active={router.pathname === (user?.role === 'admin' ? '/admin/registros': '/user/registros')}>
+                            Lista de registros
                         </ResponsiveNavLink>
                     </div>
 

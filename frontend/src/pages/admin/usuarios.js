@@ -3,9 +3,15 @@ import { RecordsList } from '@/components/Lists/RecordsList'
 import { UsersList } from '@/components/Lists/UsersList'
 import { useAuth } from '@/hooks/auth'
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
 
 const Usuarios = () => {
+    const [listUsers, setListUsers] = useState([])
     const { users } = useAuth({middleware:'auth', subRoute:'usuarios'})
+
+    useEffect(() => {
+        setListUsers(users)
+    }, [users])
 
     return (
         <AdminLayout
@@ -29,7 +35,7 @@ const Usuarios = () => {
                     </div>
                 </div>
             </div>
-            <UsersList users={users} />
+            <UsersList users={listUsers} />
             
 
          

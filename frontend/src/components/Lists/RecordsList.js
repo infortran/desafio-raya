@@ -1,33 +1,67 @@
-import { useRecords } from '@/hooks/records'
+import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import useSWR from 'swr'
-import { useAuth } from '@/hooks/auth'
 
 
-export const RecordsList = ({url}) => {
-    const {user} = useAuth({middleware:'auth', subRoute:'registros'})
-    const { getRecords } = useRecords()
-    const [registros, setRegistros] = useState()
-    const {data, error} = useSWR(url + `region?region_id=${user?.region_id}`, getRecords)
 
-    console.log('los datos',data?.data)
-    console.log('el error', error)
-    useEffect(()=> {
-        setRegistros(data?.data)
-    },[data])
-    console.log('los records del recordlist', registros)
+export const RecordsList = ({recordsData}) => {
+    const [list, setList] = useState([])
+    const [hasMore, setHasMore] = useState(true)
+    const [searchTerm, setSearchTerm] = useState('')
+
+    useEffect(() => {
+        if(! list?.length ){
+            setList(recordsData?.data)
+        }
+        setHasMore(recordsData?.next_page_url !== null)
+    },[recordsData])
+
+    const nextPage = async () => {
+        const response = await axios.get(recordsData?.next_page_url)
+        .then(next => next)
+
+        //console.log('el axios en next page', response.data)
+        setList((list) => [...list, ...response.data.data])
+        setHasMore(response.current_page >= response.last_page)
+    }
+    const handleSearch = (e)=> {
+        setSearchTerm(e.target.value)
+    }
+    //console.log('termino de busqueda', searchTerm)
     return (
         <>
+        <div className="py-4 max-w-7xl sm:px-6 lg:px-8">
+
+            <input className="w-full  block rounded text-gray-800 selection:text-gray-100 selection:bg-amber-500" 
+            type="text" value={searchTerm} onChange={handleSearch}
+            placeholder="Buscar por nombre"/>
+        </div>
+        <InfiniteScroll
+            dataLength={list?.length}
+            next={nextPage}
+            hasMore={hasMore}
+            loader={<h4>Loading</h4>}
+            endMessage={<h4>No hay más registros</h4>}
+        >
+
+        
         {
-        registros && registros.map((e, i) => 
+        list && list.filter(value => {
+            if(searchTerm === ''){
+                return value
+            }else if(value.name.toLowerCase().includes(searchTerm.toLowerCase()) ){
+                return value
+            }
+        })
+        .map((e, i) => 
             <div key={i} className="py-1">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg">
                         <div className="p-6 bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-900 rounded">
-
+                            {e.name} <br/>
                             {e.email}
-                            <p>{e.comuna.provincia.region.region}</p>
+                            <p>{e.comuna?.provincia.region.region}</p>
                         </div>
                     </div>
                 </div>
@@ -35,6 +69,7 @@ export const RecordsList = ({url}) => {
             
         )
         }
+        </InfiniteScroll>
         </>
     )
 }

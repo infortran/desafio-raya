@@ -12,9 +12,9 @@ const Dashboard = () => {
     const { getRecords } = useRecords()
     const [registros, setRegistros] = useState()
     console.log('el user', user)
-    const {data, error} = useSWR(`/api/records/region/${user?.region_id}`, getRecords)
+    const {data, error} = useSWR(`/api/records/region/${user.region_id}`, getRecords)
 
-    console.log('los datos',data)
+    console.log('los datos de registro user',data)
     useEffect(()=> {
         setRegistros(data)
     },[data])
@@ -44,7 +44,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <RecordsList records={registros} />
+            <RecordsList recordsData={registros} usuario={user}/>
         </AppLayout>
     )
 }

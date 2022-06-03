@@ -11,13 +11,16 @@ const Dashboard = () => {
     const {user} = useAuth({middleware:'auth', subRoute:'registros'})
     const { getRecords } = useRecords()
     const [registros, setRegistros] = useState()
-    console.log('el user', user)
-    const {data, error} = useSWR(`/api/records`, getRecords)
+    
+    const {data, error} = useSWR(`/api/records/`, getRecords)
 
-    console.log('los datos',data?.data)
+    //console.log('los datos',data)
+
     useEffect(()=> {
-        setRegistros(data?.data)
+        setRegistros(data)
     },[data])
+
+    console.log('registros malditos', registros)
     return (
         <AdminLayout
             subRoute={'registros'}
@@ -41,7 +44,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <RecordsList records={registros} />
+            { <RecordsList recordsData={registros} />}
         </AdminLayout>
     )
 }
