@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\RecordsController;
 use App\Http\Controllers\UserController;
+use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -23,7 +25,12 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 
-Route::get('/records/region/{region}', [RecordsController::class, 'getRecordsByRegion'])->middleware('auth:sanctum');
+Route::get('/records/region/{region}', [RecordsController::class, 'recordsByRegion'])->middleware('auth:sanctum');
 
-Route::resource('/records', RecordsController::class)->middleware('auth:sanctum');
+Route::resource('/records', RecordsController::class);
 Route::resource('/users', UserController::class)->middleware('auth:sanctum');
+Route::get('/regiones', [LocationController::class, 'regiones']);
+Route::get('/provincias', [LocationController::class, 'provincias']);
+Route::get('/comunas', [LocationController::class, 'comunas']);
+
+Route::get('/comunas-region/{region}', [LocationController::class, 'comunasByRegion']);

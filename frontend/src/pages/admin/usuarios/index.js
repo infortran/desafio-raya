@@ -3,6 +3,7 @@ import { RecordsList } from '@/components/Lists/RecordsList'
 import { UsersList } from '@/components/Lists/UsersList'
 import { useAuth } from '@/hooks/auth'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 const Usuarios = () => {
@@ -29,8 +30,11 @@ const Usuarios = () => {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-600 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 bg-white dark:bg-gray-500 border-b border-gray-200 dark:border-gray-900">
-                            <input type="text" className="w-full rounded" placeholder="Buscar"/>
+                        <div className="flex justify-between items-center p-6 bg-white dark:bg-gray-500 border-b border-gray-200 dark:border-gray-900">
+                            <div>Todos los usuarios</div>
+                            <Link href="/admin/usuarios/create">
+                            <button className="py-2 px-4 bg-amber-600 rounded">Agregar</button>
+                            </Link>
                         </div>
                     </div>
                 </div>

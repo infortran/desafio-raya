@@ -1,4 +1,5 @@
 import axios from '@/lib/axios'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -10,22 +11,31 @@ export const RecordsList = ({recordsData, usuario}) => {
     const [list, setList] = useState([])
     const [hasMore, setHasMore] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
+    const [nextPageUrl, setNextPageUrl] = useState()
     const router = useRouter()
 
     useEffect(() => {
         if(! list?.length ){
             setList(recordsData?.data)
+            setNextPageUrl(recordsData?.next_page_url)
         }
-        setHasMore(recordsData?.next_page_url !== null)
     },[recordsData])
+    
+    console.log('el list ql', list)
+    console.log('el next peich', nextPageUrl)
+    useEffect(()=> {
+        setHasMore(nextPageUrl !== null)
+        
+    }, [nextPageUrl])
 
     const nextPage = async () => {
-        const response = await axios.get(recordsData?.next_page_url)
-        .then(next => next)
-
-        //console.log('el axios en next page', response.data)
+        const response = await axios.get(nextPageUrl)
+            .then(next => next)
+        console.log('el axios en next page', response)
+        setNextPageUrl(response.data.next_page_url)
         setList((list) => [...list, ...response.data.data])
-        setHasMore(response.current_page >= response.last_page)
+        setHasMore(response.data.next_page_url !== null)
+        
     }
     const handleSearch = (e)=> {
         setSearchTerm(e.target.value)
@@ -63,14 +73,17 @@ export const RecordsList = ({recordsData, usuario}) => {
                         <div className="p-6 bg-white dark:bg-gray-600 rounded">
                             {e.name} <br/>
                             {e.email}
-                            <p>{e.comuna?.provincia.region.region}</p>
+                            <p>Región: {e.comuna.provincia.region.region}</p>
+                        </div>
+                        <div>
+
                         </div>
                         {
                             usuario?.role === 'admin' ?
                             <div className="flex items-center p-4">
-                                <button className="px-4 py-2 rounded dark:bg-gray-900" onClick={()=>{
-                                    router.push(`/admin/registros/edit/${e.id}`)
-                                }}>Editar</button>
+                                <Link href={`/admin/registros/edit/${e.id}`}>
+                                    <a className="px-4 py-2 rounded dark:bg-gray-900">Editar</a>
+                                </Link>
                                 <button className="text-2xl ml-3">&times;</button>
                             </div>
                             :''    

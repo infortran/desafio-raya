@@ -56,7 +56,8 @@ export const UsersList = ({users}) => {
 
                             {e.email}
                             <div className="">
-                                <button className="bg-gray-200 dark:bg-gray-400 py-2 px-4 rounded">Editar</button>
+                                
+                                <button className="bg-gray-200 dark:bg-gray-900 py-2 px-4 rounded">Editar</button>
                                 <button className="text-3xl ml-3">&times;</button>
                             </div>
                         </div>

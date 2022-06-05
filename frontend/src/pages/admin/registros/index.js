@@ -4,6 +4,7 @@ import { UsersList } from '@/components/Lists/UsersList'
 import { useAuth } from '@/hooks/auth'
 import { useRecords } from '@/hooks/records'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
@@ -38,8 +39,11 @@ const Registros = () => {
             <div className="pt-12 pb-2">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-600 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-900">
-                            Lista de registros
+                        <div className="flex justify-between items-center p-6 bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-900">
+                            <div>Lista de registros</div>
+                            <Link href="/admin/registros/create">
+                                <a className="py-2 px-4 bg-amber-500 rounded">Agregar</a>
+                            </Link>
                         </div>
                     </div>
                 </div>

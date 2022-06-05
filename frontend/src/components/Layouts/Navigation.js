@@ -40,7 +40,7 @@ const Navigation = ({ user }) => {
                         <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                            
                             <NavLink
-                                href="dashboard"
+                                href={user?.role === 'admin' ? '/admin/dashboard': '/user/dashboard'}
                                 active={router.pathname === (user?.role === 'admin' ? '/admin/dashboard': '/user/dashboard')}>
                                 Dashboard
                             </NavLink>
@@ -53,7 +53,7 @@ const Navigation = ({ user }) => {
                             </NavLink>:''
                             }
                             <NavLink
-                                href="registros"
+                                href={user?.role === 'admin' ? '/admin/registros': '/user/registros'}
                                 active={router.pathname === (user?.role === 'admin' ? '/admin/registros': '/user/registros')}>
                                 Lista de registros
                             </NavLink>
@@ -143,7 +143,7 @@ const Navigation = ({ user }) => {
                         </ResponsiveNavLink> : ''
                         }
                         <ResponsiveNavLink
-                            href="/dashboard"
+                            href="registros"
                             active={router.pathname === (user?.role === 'admin' ? '/admin/registros': '/user/registros')}>
                             Lista de registros
                         </ResponsiveNavLink>

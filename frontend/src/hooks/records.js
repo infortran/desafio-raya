@@ -14,7 +14,6 @@ export const useRecords = () => {
             }),
     )
     const getRecords = (url) => {
-        console.log('la url',url)
         return axios.get(url)
             .then(res => res.data)
             
@@ -24,19 +23,10 @@ export const useRecords = () => {
                 
             })
     }
-
-    /*const {data:registro, error} = useSWR(`/api/records/1`, () => {
-        axios.get(`/api/records/1`)
-        .then(res => res.data)
-        .catch(err => {
-            console.log('error del swr', err)
-        })
-    })*/
     
 
     return {
         records,
         getRecords,
-        /*registro*/
     }
 }
