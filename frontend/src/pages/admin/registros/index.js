@@ -43,7 +43,7 @@ const Registros = () => {
             
 
             <div className="pt-12 pb-2">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-600 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="flex justify-between items-center p-6 bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-900">
                             <div>Lista de registros</div>

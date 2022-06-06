@@ -1,9 +1,12 @@
 import Navigation from '@/components/Layouts/Navigation'
 import { useAuth } from '@/hooks/auth'
+import { useEffect } from 'react'
 
-const AppLayout = ({ header, children, subRoute }) => {
+const AppLayout = ({ header, children, subRoute, setUser }) => {
     const { user } = useAuth({ middleware: 'auth', subRoute })
-
+    useEffect(() => {
+        user && setUser && setUser(user)
+    },[user])
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-zinc-700">
             <Navigation user={user} />

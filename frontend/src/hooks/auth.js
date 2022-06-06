@@ -114,21 +114,16 @@ export const useAuth = ({ middleware, redirectIfAuthenticated, subRoute } = {}) 
     }
 
     useEffect(() => {
-        console.log('el redirec', redirectIfAuthenticated)
-        console.log('el user', user)
         if(!redirectIfAuthenticated && user && ! error){
-            console.log('paso el !redirect', middleware)
             if(middleware === 'auth' && user.role === 'admin'){
-                console.log('paso el admin middleware')
                 router.push(`/admin/${subRoute}`)
             }
             if(middleware === 'auth' && user.role === 'user'){
-                console.log('paso el user middleware')
                 router.push(`/user/${subRoute}`)
             }
         }else{
             console.log(middleware,'paso al otro lado del middleware')
-            if (middleware === 'guest' && user && user.role === 'admin') router.push('/admin/dashboard')
+            if (middleware === 'guest' && user && user.role === 'admin') router.push('/admin')
             if (middleware === 'guest' && redirectIfAuthenticated && user && user.role === 'user') router.push(redirectIfAuthenticated)
             if (middleware === 'auth'  && error) logout()
         }

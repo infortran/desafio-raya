@@ -29,7 +29,7 @@ const Navigation = ({ user }) => {
                     <div className="flex">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center">
-                            <Link href={user?.role === 'admin' ? '/admin/dashboard' : '/user/dashboard'}>
+                            <Link href={user?.role === 'admin' ? '/admin' : '/user'}>
                                 <a>
                                     Desafio RAYA
                                 </a>
@@ -40,8 +40,8 @@ const Navigation = ({ user }) => {
                         <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                            
                             <NavLink
-                                href={user?.role === 'admin' ? '/admin/dashboard': '/user/dashboard'}
-                                active={router.pathname === (user?.role === 'admin' ? '/admin/dashboard': '/user/dashboard')}>
+                                href={user?.role === 'admin' ? '/admin': '/user'}
+                                active={router.pathname === (user?.role === 'admin' ? '/admin': '/user')}>
                                 Dashboard
                             </NavLink>
                             {
@@ -130,8 +130,8 @@ const Navigation = ({ user }) => {
                 <div className="block sm:hidden">
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            href="/dashboard"
-                            active={router.pathname === (user?.role === 'admin' ? '/admin/dashboard': '/user/dashboard')}>
+                            href="/"
+                            active={router.pathname === (user?.role === 'admin' ? '/admin': '/user')}>
                             Dashboard
                         </ResponsiveNavLink>
                         {
@@ -143,7 +143,7 @@ const Navigation = ({ user }) => {
                         </ResponsiveNavLink> : ''
                         }
                         <ResponsiveNavLink
-                            href="registros"
+                            href={user?.role === 'admin' ? '/admin/registros': '/user/registros'}
                             active={router.pathname === (user?.role === 'admin' ? '/admin/registros': '/user/registros')}>
                             Lista de registros
                         </ResponsiveNavLink>

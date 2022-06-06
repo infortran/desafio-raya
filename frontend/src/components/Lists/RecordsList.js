@@ -1,3 +1,4 @@
+import { useRecords } from '@/hooks/records'
 import axios from '@/lib/axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -12,6 +13,8 @@ export const RecordsList = ({recordsData, usuario}) => {
     const [hasMore, setHasMore] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
     const [nextPageUrl, setNextPageUrl] = useState()
+    const {deleteRecord} = useRecords()
+
 
     useEffect(() => {
         if(! list?.length ){
@@ -38,7 +41,7 @@ export const RecordsList = ({recordsData, usuario}) => {
     }
     return (
         <>
-        <div className="py-4 max-w-7xl sm:px-6 lg:px-8">
+        <div className="py-4 max-w-4xl mx-auto sm:px-6 lg:px-8">
 
             <input className="w-full  block rounded text-gray-800 selection:text-gray-100 selection:bg-amber-500" 
             type="text" value={searchTerm} onChange={handleSearch}
@@ -48,8 +51,8 @@ export const RecordsList = ({recordsData, usuario}) => {
             dataLength={list?.length}
             next={nextPage}
             hasMore={hasMore}
-            loader={<h4>Loading</h4>}
-            endMessage={<h4>No hay más registros</h4>}
+            loader={<h4 className="text-center pt-5">Cargando...</h4>}
+            endMessage={<h4 className="text-center pt-5">No hay más registros</h4>}
         >
 
         
@@ -63,9 +66,9 @@ export const RecordsList = ({recordsData, usuario}) => {
         })
         .map((e, i) => 
             <div key={i} className="py-1">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 text-center md:text-left">
-                    <div className="flex flex-col  justify-between items-center bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg">
-                        <div className="p-6 bg-white dark:bg-gray-600 rounded ">
+                <div className="max-w-4xl mx-auto sm:px-6 lg:px-8 text-center md:text-left">
+                    <div className="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg">
+                        <div className="p-6 w-full md:w-1/4 bg-white dark:bg-gray-600 rounded ">
                             <div>
                                 <div className="text-xl">{e.name}</div>
                                 <div className="text-gray-300">
@@ -74,7 +77,7 @@ export const RecordsList = ({recordsData, usuario}) => {
                             </div>
                             <p className="text-sm text-gray-400 mt-1">Región: {e.comuna.provincia.region.region}</p>
                         </div>
-                        <div className="p-6 text-xs bg-gray-700 rounded">
+                        <div className="p-6 w-48 text-xs bg-gray-700 rounded">
                             <div>Rut: {e.rut}</div>
 
                             <div>Fecha Nac: {e.date_birth}</div>
@@ -86,7 +89,10 @@ export const RecordsList = ({recordsData, usuario}) => {
                                 <Link href={`/admin/registros/edit/${e.id}`}>
                                     <a className="px-4 py-2 rounded dark:bg-gray-900">Editar</a>
                                 </Link>
-                                <button className="text-4xl md:text-2xl ml-3 ">&times;</button>
+                                <button className="text-4xl md:text-2xl ml-3 " onClick={()=> {
+                                    deleteRecord(e.id)
+                                    
+                                }}>&times;</button>
                             </div>
                             :''    
                         }
