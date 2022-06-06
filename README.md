@@ -47,7 +47,6 @@ cd desafio-raya
 composer install
 cp .env.example .env
 php artisan key:generate
-php artisan breeze:install api
 ```
 Ya una vez copiado nuestro archivo .env, debemos editarlo para que la base de datos y las URL del Frontend comiencen a funcionar:
 ```sh
