@@ -2,7 +2,7 @@ import axios from '@/lib/axios'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import AdminLayout from '@/components/Layouts/AdminLayout'
-import FormRecord from '@/components/Forms/record'
+import FormCreateRecord from '@/components/Forms/CreateRecord'
 import Swal from 'sweetalert2'
 
 const Create = () => {
@@ -13,7 +13,8 @@ const Create = () => {
         email: '',
         phone: '',
         date_birth: '',
-        comuna_id: ''
+        comuna_id: '',
+        region_id: ''
     })
     const [errors, setErrors] = useState({
         name: '',
@@ -86,7 +87,7 @@ const Create = () => {
             >
                 <div className="max-w-xl mx-auto p-5">
                     <h1 className="text-xl py-3">Crear un nuevo registro</h1>
-                    <FormRecord record={record} setRecord={setRecord} handleForm={handleForm} action={create} errors={errors} handleErrors={handleErrors} />
+                    <FormCreateRecord record={record} setRecord={setRecord} handleForm={handleForm} action={create} errors={errors} handleErrors={handleErrors} />
                 </div>
             </AdminLayout>
         </>

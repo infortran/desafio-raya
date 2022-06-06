@@ -12,7 +12,6 @@ export const RecordsList = ({recordsData, usuario}) => {
     const [hasMore, setHasMore] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
     const [nextPageUrl, setNextPageUrl] = useState()
-    const router = useRouter()
 
     useEffect(() => {
         if(! list?.length ){
@@ -21,26 +20,22 @@ export const RecordsList = ({recordsData, usuario}) => {
         }
     },[recordsData])
     
-    console.log('el list ql', list)
-    console.log('el next peich', nextPageUrl)
     useEffect(()=> {
         setHasMore(nextPageUrl !== null)
-        
     }, [nextPageUrl])
 
     const nextPage = async () => {
         const response = await axios.get(nextPageUrl)
             .then(next => next)
-        console.log('el axios en next page', response)
         setNextPageUrl(response.data.next_page_url)
-        setList((list) => [...list, ...response.data.data])
+        if(response.data.data){
+            setList((list) => [...list, ...response.data.data])
+        }
         setHasMore(response.data.next_page_url !== null)
-        
     }
     const handleSearch = (e)=> {
         setSearchTerm(e.target.value)
     }
-    //console.log('termino de busqueda', searchTerm)
     return (
         <>
         <div className="py-4 max-w-7xl sm:px-6 lg:px-8">

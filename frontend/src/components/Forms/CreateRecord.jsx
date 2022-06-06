@@ -1,57 +1,27 @@
 import { useLocations } from "@/hooks/locations"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import axios from '@/lib/axios'
 
 
-const FormRecord = ({record, setRecord, handleForm, action, errors, handleErrors}) => {
+const FormCreateRecord = ({record, setRecord, handleForm, action, errors, handleErrors}) => {
     const {regiones} = useLocations()
-    const [listComuna, setListComuna] = useState([])
-    const [locationSelected, setLocationSelected] = useState({
-        region_id:'',
-        comuna_id:''
-    }) 
-    useEffect(()=>{
-        if(record.comuna_id && locationSelected.comuna_id === '' && locationSelected.region_id === ''){
-            console.log('pasando con el use effect')
-            fetcher(record.comuna?.provincia.region.id)
-            setLocationSelected({
-                comuna_id:record.comuna_id,
-                region_id:record.comuna?.provincia.region.id
-            })
-        }
-    },[record.comuna_id])
+    const [listComuna, setListComuna] = useState([]) 
 
     const handleSelectRegion = (e) => {
-        fetcher(e.target.value)
-        setLocationSelected({
-            ...locationSelected,
-            [e.target.name]:e.target.value
-        })
-        setRecord({
-            ...record,
-            [e.target.name]:e.target.value
-        })
-    }
-    const handleSelectComuna = (e) => {
-        setLocationSelected({
-            ...locationSelected,
-            [e.target.name]:e.target.value
-        })
-        setRecord({
-            ...record,
-            [e.target.name]:e.target.value
-        })
-    }
-
-    const fetcher = (id) => {
-        axios.get(`/api/comunas-region/${id}`)
+        axios.get(`/api/comunas-region/${e.target.value}`)
             .then(res => {
                 setListComuna(res.data)
+                setRecord({
+                    ...record,
+                    [e.target.name]:e.target.value
+                })
             })
             .catch(err => {
                 console.log('error select region', err)
             })
     }
+
+   
     
     return (
         <>
@@ -86,7 +56,7 @@ const FormRecord = ({record, setRecord, handleForm, action, errors, handleErrors
                 </div>
                 <div className="pb-5">
                     <label htmlFor="">Región:</label>
-                    <select name="region_id" value={locationSelected.region_id} className="dark:bg-gray-600 w-full rounded" onChange={handleSelectRegion}>
+                    <select name="region_id" defaultValue={record.region_id}  className="dark:bg-gray-600 w-full rounded" onChange={handleSelectRegion}>
                         <option disabled={true} value="">Selecciona una región</option>
                         {
                             regiones && regiones.map((region, i) => (
@@ -97,8 +67,8 @@ const FormRecord = ({record, setRecord, handleForm, action, errors, handleErrors
                 </div>
                 <div className="pb-5">
                     <label htmlFor="">Comuna:</label>
-                    <select name="comuna_id" value={locationSelected.comuna_id} id="" className="dark:bg-gray-600 w-full rounded" 
-                    onChange={handleSelectComuna}>
+                    <select name="comuna_id" value={record.comuna_id} id="" className="dark:bg-gray-600 w-full rounded" 
+                    onChange={handleForm}>
                         {/*<option value="">opcion</option>*/}
                         <option disabled={true} value="">Selecciona una comuna</option>
                         {
@@ -116,4 +86,4 @@ const FormRecord = ({record, setRecord, handleForm, action, errors, handleErrors
     )
 }
 
-export default FormRecord
+export default FormCreateRecord

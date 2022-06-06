@@ -1,27 +1,36 @@
 import AdminLayout from '@/components/Layouts/AdminLayout'
 import { RecordsList } from '@/components/Lists/RecordsList'
-import { UsersList } from '@/components/Lists/UsersList'
 import { useAuth } from '@/hooks/auth'
 import { useRecords } from '@/hooks/records'
+import axios from '@/lib/axios'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr'
 
 const Registros = () => {
     const {user} = useAuth({middleware:'auth', subRoute:'registros'})
-    const { getRecords } = useRecords()
     const [registros, setRegistros] = useState()
+    const [isMounted, setIsMounted] = useState(false)
     
-    const {data, error} = useSWR(`/api/records/`, getRecords)
+    const getRecords = useCallback(async () => {
+        const res = await axios.get('/api/records')
+        const data = await res.data
+        setRegistros(data)
+    })
 
     //console.log('los datos',data)
 
     useEffect(()=> {
-        setRegistros(data)
-    },[data])
+        if(!registros){
+            
+        }
+        if(!isMounted){
+            setIsMounted(true)
+            getRecords()
+        }
+    },[ isMounted, getRecords])
 
-    console.log('registros malditos', registros)
     return (
         <AdminLayout
             subRoute={'registros'}
@@ -52,5 +61,6 @@ const Registros = () => {
         </AdminLayout>
     )
 }
+
 
 export default Registros

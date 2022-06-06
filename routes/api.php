@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::get('/records/region/{region}', [RecordsController::class, 'recordsByRegion'])->middleware('auth:sanctum');
 
-Route::resource('/records', RecordsController::class);
+Route::resource('/records', RecordsController::class)->middleware('auth:sanctum');
 Route::resource('/users', UserController::class)->middleware('auth:sanctum');
 Route::get('/regiones', [LocationController::class, 'regiones']);
 Route::get('/provincias', [LocationController::class, 'provincias']);
