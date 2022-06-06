@@ -73,13 +73,19 @@ Para instalar las dependencias del Frontend debes correr en tu consola:
 ```sh
 cd frontend
 npm i
-npm run dev
 ```
 
 en la carpeta Frontend debes hacer una copia del archivo .env.example y renombrarlo como .env.local, dentro del archivo debes escribir lo siguiente:
 ```
 NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
+
+Y luego para correr la app del frontend el siguiente comando
+
+```
+npm run dev
+```
+
 Y listo :D
 
 Con esto la aplicación ya deberia correr sin problemas...
