@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             RecordSeeder::class,
         ]);
 
-        $path = 'public/storage/regiones.sql';
+        $path = 'public/regiones.sql';
         DB::unprepared(file_get_contents($path));
     }
 }
