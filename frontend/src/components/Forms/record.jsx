@@ -12,7 +12,6 @@ const FormRecord = ({record, setRecord, handleForm, action, errors, handleErrors
     }) 
     useEffect(()=>{
         if(record.comuna_id && locationSelected.comuna_id === '' && locationSelected.region_id === ''){
-            console.log('pasando con el use effect')
             fetcher(record.comuna?.provincia.region.id)
             setLocationSelected({
                 comuna_id:record.comuna_id,
@@ -66,12 +65,12 @@ const FormRecord = ({record, setRecord, handleForm, action, errors, handleErrors
                 </div>
                 <div className="pb-5">
                     <label htmlFor="" >Rut:</label>
-                    <input className="dark:bg-gray-600 w-full rounded" type="text" name="rut" value={record?.rut} onChange={handleForm} onFocus={()=>{handleErrors({})}}/>
+                    <input className="dark:bg-gray-400 w-full rounded hover:cursor-not-allowed" type="text" name="rut" value={record?.rut} onChange={handleForm} onFocus={()=>{handleErrors({})}} disabled />
                     <small className="text-red-500">{errors.rut}</small>
                 </div>
                 <div className="pb-5">
                     <label htmlFor="" >Email:</label>
-                    <input className="dark:bg-gray-600 w-full rounded" type="text" name="email" value={record?.email} onChange={handleForm} onFocus={()=>{handleErrors({})}}/>
+                    <input className="dark:bg-gray-400 w-full rounded hover:cursor-not-allowed" type="text" name="email" value={record?.email} onChange={handleForm} onFocus={()=>{handleErrors({})}} disabled />
                     <small className="text-red-500">{errors.email}</small>
                 </div>
                 <div className="pb-5">

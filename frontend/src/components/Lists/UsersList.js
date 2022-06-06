@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from '@/lib/axios'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import Link from "next/link"
 
 export const UsersList = ({users}) => {
     const [list, setList] = useState([])
@@ -53,11 +54,15 @@ export const UsersList = ({users}) => {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg ">
                         <div className="p-6 bg-white dark:bg-gray-600 border-b border-gray-200 dark:border-gray-900 rounded flex items-center justify-between">
-
-                            {e.email}
+                            <div>
+                                <div className="text-xl bold w-32 sm:w-48 md:w-full">{e.name}</div>
+                                <div className="text-gray-400 w-32 sm:w-48 md:w-full overflow-hidden">{e.email}</div>
+                            </div>
+                            
                             <div className="">
-                                
-                                <button className="bg-gray-200 dark:bg-gray-900 py-2 px-4 rounded">Editar</button>
+                                <Link href={`/admin/usuarios/edit/${e.id}`}>
+                                    <button className="bg-gray-200 dark:bg-gray-900 py-2 px-4 rounded">Editar</button>
+                                </Link>
                                 <button className="text-3xl ml-3">&times;</button>
                             </div>
                         </div>

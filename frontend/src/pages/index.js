@@ -2,29 +2,101 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
-import {useTheme} from 'next-themes'
+import { useTheme } from 'next-themes'
+import axios from '@/lib/axios'
+import Swal from 'sweetalert2'
 
 export default function Home() {
     const { user } = useAuth({ middleware: 'guest' })
     const [darkTheme, setDarkTheme] = useState(true)
     const { setTheme } = useTheme()
 
+    const [regions, setRegions] = useState([]);
+    const [communes, setCommunes] = useState([]);
+
+    const initialFormValues = {
+        name: '',
+        email: '',
+        phone: '',
+        region_id: '',
+        comuna_id: '',
+        rut: '',
+        date_birth: '',
+    }
+
+    const [formValues, setFormValues] = useState(initialFormValues);
+
+    const [errors, setErrors] = useState(initialFormValues);
+
     useEffect(() => {
-        if(localStorage.getItem('theme')){
-            if(localStorage.getItem('theme') === 'dark'){
+        axios.get('/api/regiones')
+            .then(res => {
+                setRegions(res.data);
+            })
+    }, [])
+
+    useEffect(() => {
+        if (formValues.region_id) {
+            setCommunes([]);
+            setFormValues({
+                ...formValues,
+                comuna_id: '',
+            });
+
+            axios.get('/api/comunas-region/' + formValues.region_id)
+                .then(res => {
+                    setCommunes(res.data);
+                })
+        }
+    }, [formValues.region_id])
+
+
+    const handleChange = (e) => {
+        setErrors({
+            ...errors,
+            [e.target.name]: '',
+        });
+        setFormValues({
+            ...formValues,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        axios.post('/api/records', {
+            ...formValues,
+            phone: formValues.phone.replace(/\+|\(|\)|\s|\-/g, '') // remove spaces, +, -, and ()
+        })
+            .then(res => {
+                setFormValues(initialFormValues);
+                Swal.fire({
+                    title: 'Filete :D!!!',
+                    text: 'Gracias por registrarte en el sistema.',
+                })
+            })
+            .catch(err => {
+                setErrors(err.response.data.errors);
+            })
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem('theme')) {
+            if (localStorage.getItem('theme') === 'dark') {
                 setDarkTheme(true)
-            }else if(localStorage.getItem('theme') === 'light'){
+            } else if (localStorage.getItem('theme') === 'light') {
                 setDarkTheme(false)
             }
         }
-    },[])
+    }, [])
 
     const toggleTheme = (e) => {
-        if(e.target.checked){
+        if (e.target.checked) {
             localStorage.setItem('theme', 'dark')
             setTheme('dark')
             setDarkTheme(true)
-        }else{
+        } else {
             localStorage.setItem('theme', 'light')
             setTheme('light')
             setDarkTheme(false)
@@ -35,16 +107,15 @@ export default function Home() {
         <>
             <Head>
                 <title>Desafio RAYA | Freddy Perez</title>
-      
             </Head>
 
             <div className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
                 <div className="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     <div className="flex justify-center">
-                       <label htmlFor="check-dark-mode" className="bg-gray-300 cursor-pointer relative w-10 h-6 rounded-full">
-                           <input type="checkbox" id="check-dark-mode" className="sr-only peer" checked={darkTheme} onChange={toggleTheme}/>
-                           <span className="w-2/5 h-4 bg-amber-600 absolute rounded-full left-1 top-1 peer-checked:left-5 transition-all duration-500"></span>
-                       </label>
+                        <label htmlFor="check-dark-mode" className="bg-gray-300 cursor-pointer relative w-10 h-6 rounded-full">
+                            <input type="checkbox" id="check-dark-mode" className="sr-only peer" checked={darkTheme} onChange={toggleTheme} />
+                            <span className="w-2/5 h-4 bg-amber-600 absolute rounded-full left-1 top-1 peer-checked:left-5 transition-all duration-500"></span>
+                        </label>
                     </div>
                     <div>
 
@@ -76,38 +147,56 @@ export default function Home() {
                         <div className="">
                             <div className="p-6">
                                 <div className="items-center">
-                                    <form action="" className="w-full">
+                                    {/* {JSON.stringify(formValues, null, 4)} */}
+                                    <form onSubmit={handleSubmit} action="" className="w-full">
                                         <div className="flex pb-3">
                                             <div className="w-3/4">
                                                 <label className="text-gray-400" htmlFor="">Nombre</label>
-                                                <input name="" type="text" className="w-full rounded" />
+                                                <input name="name" type="text" className="dark:bg-gray-600 w-full rounded relative" value={formValues.name} onChange={handleChange} />
+                                                {errors?.name && <p className="text-red-500 text-xs">{errors.name}</p>}
                                             </div>
                                             <div className="ml-2">
                                                 <label className="text-gray-400" htmlFor="">Rut</label>
-                                                <input type="text" className="w-full rounded" />
+                                                <input name="rut" type="text" className="dark:bg-gray-600 w-full rounded relative" value={formValues.rut} onChange={handleChange} />
+                                                {errors?.rut && <p className="text-red-500 text-xs">{errors.rut}</p>}
                                             </div>
                                         </div>
                                         <div className="flex pb-3">
                                             <div className="w-3/4">
                                                 <label className="text-gray-400" htmlFor="">Email</label>
-                                                <input type="text" className="w-full rounded" />
+                                                <input name="email" type="text" className="dark:bg-gray-600 w-full rounded relative" value={formValues.email} onChange={handleChange} />
+                                                {errors?.email && <p className="text-red-500 text-xs">{errors.email}</p>}
                                             </div>
                                             <div className="ml-2">
                                                 <label className="text-gray-400" htmlFor="">Teléfono</label>
-                                                <input type="text" className="w-full rounded" />
+                                                <input name="phone" type="text" className="dark:bg-gray-600 w-full rounded relative" value={formValues.phone} onChange={handleChange} />
+                                                {errors?.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
                                             </div>
                                         </div>
                                         <div className="pb-3">
+                                            <label htmlFor="" >Fecha de nacimiento:</label>
+                                            <input className="dark:bg-gray-600 w-full rounded relative" type="date" name="date_birth" value={formValues.date_birth} onChange={handleChange} />
+                                            {errors?.date_birth && <p className="text-red-500 text-xs">{errors.date_birth}</p>}
+                                        </div>
+                                        <div className="pb-3">
                                             <label className="text-gray-400" htmlFor="">Región</label>
-                                            <select name="" id="" className="rounded w-full">
-                                                <option value="">Selecciona una region</option>
+                                            <select value={formValues.region_id} name="region_id" id="" className="dark:bg-gray-600 w-full rounded relative" value={formValues.region_id} onChange={handleChange}>
+                                                <option disabled value="">Selecciona una region</option>
+                                                {regions.map(region => (
+                                                    <option key={region.id} value={region.id}>{region.region}</option>
+                                                ))}
                                             </select>
+                                            {errors?.region_id && <p className="text-red-500 text-xs">{errors.region_id}</p>}
                                         </div>
                                         <div className="pb-5">
                                             <label className="text-gray-400" htmlFor="">Comuna</label>
-                                            <select name="" id="" className="rounded w-full">
-                                                <option value="">Selecciona una region</option>
+                                            <select value={formValues.comuna_id} name="comuna_id" id="" className="dark:bg-gray-600 w-full rounded relative" value={formValues.comuna_id} onChange={handleChange}>
+                                                <option disabled value="">Selecciona una comuna</option>
+                                                {communes.map(commune => (
+                                                    <option key={commune.id} value={commune.id}>{commune.comuna}</option>
+                                                ))}
                                             </select>
+                                            {errors?.comuna_id && <p className="text-red-500 text-xs">{errors.comuna_id}</p>}
                                         </div>
                                         <div className="py-3">
                                             <button className="bg-amber-600 rounded p-2 w-full text-gray-50">Registrar</button>
@@ -119,8 +208,6 @@ export default function Home() {
 
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </>

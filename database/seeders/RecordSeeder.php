@@ -228,7 +228,7 @@ class RecordSeeder extends Seeder
             'phone' => rand(100000000, 999999999),
             'comuna_id' => 10
         ],
-       
+
         ]);
     }
 }

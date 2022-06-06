@@ -5,8 +5,13 @@ const FormUser = ({user, setUser, handleForm, action, errors, handleErrors}) => 
 
     const {regiones} = useLocations()
     const [role, setRole] = useState(user.role === 'admin')
-
     
+
+    useEffect(() => {
+        if(user.role){
+            setRole(user.role === 'admin')
+        }
+    },[user])
 
     const handleRole = (e) => {
         setRole( e.target.checked )
@@ -14,30 +19,24 @@ const FormUser = ({user, setUser, handleForm, action, errors, handleErrors}) => 
             ...user,
             ['role']:e.target.checked ? 'admin' : 'user'
         })
-        //console.log('handle role', e.target.value)
     }
-
-    /*const handleSelectRegion = (e) => {
-        console.log('el target del select', e.target.value)
-        setUser({
-            ...user,
-            [e.target.name]:e.target.value
-        })
-    }*/
 
     
 
     return (
         <form onSubmit={action}>
             <div className="pb-5">
-                <label htmlFor="">Nombre:</label>
-                <div className="flex items-center justify-between">
-                    <input name="name" className="block w-3/4 rounded dark:bg-gray-600" type="text" 
-                        value={user.name} 
-                        onChange={handleForm}
-                        onFocus={()=>{handleErrors({})}}/>
+                
+                <div className="flex items-center justify-between flex-col md:flex-row">
+                    <div className="w-full md:w-3/4">
+                        <label htmlFor="">Nombre:</label>
+                        <input name="name" className="block w-full rounded dark:bg-gray-600 order-last md:order-first" type="text" 
+                            value={user.name} 
+                            onChange={handleForm}
+                            onFocus={()=>{handleErrors({})}}/>
+                    </div>
 
-                    <div className="block w-1/4 flex justify-center">
+                    <div className="block md:w-1/4 flex justify-center pb-5 md:pb-0 order-first md:order-last">
                         <div className="w-12">{role ? 'Admin' : 'Usuario'}</div>
                         <label htmlFor="check-role" className="ml-3 bg-gray-300 cursor-pointer relative w-10 h-6 rounded-full">
                             <input name="role" type="checkbox" id="check-role" className="sr-only peer" checked={role} onChange={handleRole}/>
@@ -50,14 +49,14 @@ const FormUser = ({user, setUser, handleForm, action, errors, handleErrors}) => 
             </div>
             <div className="pb-5">
                 <label htmlFor="">Email:</label>
-                <input name="email" value={user.email} onChange={handleForm} onFocus={()=>{handleErrors({})}} className="w-full rounded dark:bg-gray-600" type="email" />
+                <input name="email" value={user.email} onChange={handleForm} onFocus={()=>{handleErrors({})}} className={`w-full rounded dark:bg-gray-${action.name === 'update' ? '400 cursor-not-allowed': '600'}`} type="email" disabled={action.name === 'update'} />
                 <small className="text-red-500">{errors.email}</small>
             </div>
-            <div className="pb-5">
+            {action.name === 'create' && <div className="pb-5">
                 <label htmlFor="">Contraseña:</label>
                 <input name="password" value={user.password} onChange={handleForm} onFocus={()=>{handleErrors({})}} className="w-full rounded dark:bg-gray-600" type="password" />
                 <small className="text-red-500">{errors.password}</small>
-            </div>
+    </div>}
             <div className="pb-5">
                 <label htmlFor="">Región:</label>
                 <select name="region_id" className="w-full rounded dark:bg-gray-600" value={user.region_id} onChange={handleForm} onFocus={()=>{handleErrors({})}}>

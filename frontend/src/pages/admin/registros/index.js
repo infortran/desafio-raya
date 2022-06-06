@@ -22,9 +22,6 @@ const Registros = () => {
     //console.log('los datos',data)
 
     useEffect(()=> {
-        if(!registros){
-            
-        }
         if(!isMounted){
             setIsMounted(true)
             getRecords()

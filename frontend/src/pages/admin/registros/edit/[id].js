@@ -41,7 +41,7 @@ const Edit = ({id}) => {
         if (data) {
             setRecord(data)
         }
-        console.log('data re culiao', data)
+        
     },[data])
 
     const handleForm = (e) => {
@@ -71,7 +71,7 @@ const Edit = ({id}) => {
             }
         })
         .catch(err => {
-            console.log('el error del update', err)
+            handleErrors(err.response.data.errors)
         })
     }
 

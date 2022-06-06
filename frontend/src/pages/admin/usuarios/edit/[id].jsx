@@ -14,16 +14,35 @@ const Edit = ({id}) => {
         name: '',
         email: '',
         password: '',
-        role: false,
+        role: '',
         region_id: ''
     })
-    const { getRecords } = useRecords()
+    const [errors, setErrors] = useState({
+        name: '',
+        email: '',
+        role: '',
+        region_id: ''
+    })
+
+    const fetcher = (url) => {
+        return axios.get(url)
+        .then(res => {
+            console.log('la vaca', res)
+            return res.data
+        })
+        .catch(err => {
+            console.log('error fetcher edit user', err)
+        })
+    }
     
-    const {data} = useSWR(`api/users/${id}`, getRecords)
+    
+    const {data} = useSWR(`api/users/${id}`, fetcher)
 
     useEffect(() => {
-        setUser(data?.id)
-    },[data, id])
+        if(data){
+            setUser(data)
+        }
+    },[data])
 
     const handleForm = (e) => {
         setUser({
@@ -52,9 +71,26 @@ const Edit = ({id}) => {
             }
         })
         .catch(err => {
-            console.log('el error del update', err)
+            handleErrors(err.response.data.errors)
         })
     }
+
+    const handleErrors = (data) => {
+        if (Object.keys(data).length > 0) {
+            setErrors({
+                ...errors, ...data
+            })
+        } else {
+            setErrors({
+                name: '',
+                email: '',
+                role: '',
+                region_id: ''
+            })
+        }
+
+    }
+
     return (
     <>
     
@@ -62,8 +98,8 @@ const Edit = ({id}) => {
         subRoute={`usuarios/edit/${id}`}
     >
         <div className="max-w-xl mx-auto p-5">
-            <h1 className="text-xl py-3">Editar usuario {record?.name}</h1>
-            <FormUser user={user} handleForm={handleForm} action={update} />
+            <h1 className="text-xl py-3">Editar usuario {user?.name}</h1>
+            <FormUser user={user} setUser={setUser} handleForm={handleForm} action={update} errors={errors} handleErrors={handleErrors}/>
         </div>
     </AdminLayout>
     </>

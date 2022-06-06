@@ -63,15 +63,22 @@ export const RecordsList = ({recordsData, usuario}) => {
         })
         .map((e, i) => 
             <div key={i} className="py-1">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="flex justify-between bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg">
-                        <div className="p-6 bg-white dark:bg-gray-600 rounded">
-                            {e.name} <br/>
-                            {e.email}
-                            <p>Región: {e.comuna.provincia.region.region}</p>
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 text-center md:text-left">
+                    <div className="flex flex-col  justify-between items-center bg-white dark:bg-gray-600 shadow-sm sm:rounded-lg">
+                        <div className="p-6 bg-white dark:bg-gray-600 rounded ">
+                            <div>
+                                <div className="text-xl">{e.name}</div>
+                                <div className="text-gray-300">
+                                    {e.email}
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-400 mt-1">Región: {e.comuna.provincia.region.region}</p>
                         </div>
-                        <div>
+                        <div className="p-6 text-xs bg-gray-700 rounded">
+                            <div>Rut: {e.rut}</div>
 
+                            <div>Fecha Nac: {e.date_birth}</div>
+                            <div>Comuna: {e.comuna.comuna}</div>
                         </div>
                         {
                             usuario?.role === 'admin' ?
@@ -79,7 +86,7 @@ export const RecordsList = ({recordsData, usuario}) => {
                                 <Link href={`/admin/registros/edit/${e.id}`}>
                                     <a className="px-4 py-2 rounded dark:bg-gray-900">Editar</a>
                                 </Link>
-                                <button className="text-2xl ml-3">&times;</button>
+                                <button className="text-4xl md:text-2xl ml-3 ">&times;</button>
                             </div>
                             :''    
                         }

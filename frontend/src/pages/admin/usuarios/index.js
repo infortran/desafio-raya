@@ -1,18 +1,27 @@
 import AdminLayout from '@/components/Layouts/AdminLayout'
 import { RecordsList } from '@/components/Lists/RecordsList'
 import { UsersList } from '@/components/Lists/UsersList'
-import { useAuth } from '@/hooks/auth'
+import axios from '@/lib/axios'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const Usuarios = () => {
     const [listUsers, setListUsers] = useState([])
-    const { users } = useAuth({middleware:'auth', subRoute:'usuarios'})
+    const [isMounted, setIsMounted] = useState(false)
 
-    useEffect(() => {
-        setListUsers(users)
-    }, [users])
+    const getUsers = useCallback(async () => {
+        const res = await axios.get('/api/users')
+        const data = await res.data
+        setListUsers(data)
+    })
+
+    useEffect(()=> {
+        if(!isMounted){
+            setIsMounted(true)
+            getUsers()
+        }
+    },[ isMounted, getUsers])
 
     return (
         <AdminLayout
