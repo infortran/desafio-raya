@@ -1,64 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Desafio RAYA
+## _Test Práctico - Laravel Full Stack_
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+Desafio RAYA, es una aplicación que permite crear registros desde una landing page en el home, y al mismo tiempo, brindar una cuenta de administrador y de usuario, las cuales pueden entrar cada una a su dashboard propio.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+El usuario solo puede visualizar registros que sean de su misma región, mientras que, el administrador puede ver todos, crear, modificar y eliminar, tanto registros como usuarios, a los cuales, en nuevos usuarios se puede asignar un rol (admin o user).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+- Se validaron los errores por required | max:255 | email | date | integer, entre otros...
+- Para la validación del RUT se utilizo una dependencia y se creó una Rule
+- La base de datos de Regiones Provincias y Comunas fue traspasada a un archivo SQL y se auto importa a la base de datos a través de un Seeder
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Tecnologías utilizadas
 
-## Laravel Sponsors
+Este proyecto fue desarrollado con el siguiente stack:
+##### Backend:
+- [Laravel v8.75] - Desarrollo de API Rest
+- [Chilean Bundle v2.1] - Dependencia para validación de RUT
+- [Laravel Breeze v1.9] - Esquema de trabajo con NextJS
+- [Laravel Sanctum v2.15] - Herramienta de Laravel para Autenticación API
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+#### Frontend:
+- [Next JS v12.0.4] - Framework SSR de reactJS (Especial para SEO)
+- [React v.17.0.2] - Libreria de Javascript
+- [Tailwind CSS v3.0.22] - Framework de CSS y SASS.
+- [Sweet Alert v.11.4.17] - Biblioteca de alerts y popups
+- [React Infinite Scroll Component v6.1.0] - Componente para Infinite Scroll
+- [Axios v0.21.1] - Cliente HTTP javascript
+- [SWR v.1.2.2] - Hook para generar peticiones CSR
 
-### Premium Partners
+And of course Dillinger itself is open source with a [public repository][dill]
+ on GitHub.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Instalación
 
-## Contributing
+Desafio Raya requiere [Composer](https://getcomposer.org/download) v2+ y [Node](https://nodejs.org) para instalar la aplicación.
+Además se debe contar con una base de datos MYSQL la cual se debe llamar _desafioraya_.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Para instalar la aplicación debes correr los siguientes comandos en tu consola.
 
-## Code of Conduct
+```sh
+git clone https://github.com/infortran/desafio-raya.git
+cd desafio-raya
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan breeze:install api
+```
+Ya una vez copiado nuestro archivo .env, debemos editarlo para que la base de datos y las URL del Frontend comiencen a funcionar:
+```sh
+APP_URL=http://localhost:8000
+FRONTEND_URL=http://localhost:3000
+```
+```sh
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=desafioraya
+DB_USERNAME=root (reemplazar por los datos de tu MySQL)
+DB_PASSWORD=
+```
+Teniendo configurada nuestra base de datos debemos migrar las tablas de la base de datos la cual incluye las tablas de Regiones Provincias y Comunas, y luego poner a trabajar el server local:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```sh
+php artisan migrate --seed
+php artisan serve
+```
+#### Frontend
+Para instalar las dependencias del Frontend debes correr en tu consola:
 
-## Security Vulnerabilities
+```sh
+cd frontend
+npm i
+npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+en la carpeta Frontend debes hacer una copia del archivo .env.example y renombrarlo como .env.local, dentro del archivo debes escribir lo siguiente:
+```
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+```
+Y listo :D
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Con esto la aplicación ya deberia correr sin problemas...
+Desarrollado Por Freddy Perez P.

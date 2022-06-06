@@ -1,84 +1,87 @@
-# Laravel Breeze - Next.js Edition 🏝️
+# Desafio RAYA
+## _Test Práctico - Laravel Full Stack_
 
-## Introduction
 
-This repository is an implementing of the [Laravel Breeze](https://laravel.com/docs/starter-kits) application / authentication starter kit frontend in [Next.js](https://nextjs.org). All of the authentication boilerplate is already written for you - powered by [Laravel Sanctum](https://laravel.com/docs/sanctum), allowing you to quickly begin pairing your beautiful Next.js frontend with a powerful Laravel backend.
+Desafio RAYA, es una aplicación que permite crear registros desde una landing page en el home, y al mismo tiempo, brindar una cuenta de administrador y de usuario, las cuales pueden entrar cada una a su dashboard propio.
 
-## Official Documentation
+El usuario solo puede visualizar registros que sean de su misma región, mientras que, el administrador puede ver todos, crear, modificar y eliminar, tanto registros como usuarios, a los cuales, en nuevos usuarios se puede asignar un rol (admin o user).
 
-### Installation
 
-First, create a Next.js compatible Laravel backend by installing Laravel Breeze into a [fresh Laravel application](https://laravel.com/docs/installation) and installing Breeze's API scaffolding:
 
-```bash
-# Create the Laravel application...
-laravel new next-backend
+- Se validaron los errores por required | max:255 | email | date | integer, entre otros...
+- Para la validación del RUT se utilizo una dependencia y se creó una Rule
+- La base de datos de Regiones Provincias y Comunas fue traspasada a un archivo SQL y se auto importa a la base de datos a través de un Seeder
 
-cd next-backend
 
-# Install Breeze and dependencies...
-composer require laravel/breeze
+## Tecnologías utilizadas
 
+Este proyecto fue desarrollado con el siguiente stack:
+##### Backend:
+- [Laravel v8.75] - Desarrollo de API Rest
+- [Chilean Bundle v2.1] - Dependencia para validación de RUT
+- [Laravel Breeze v1.9] - Esquema de trabajo con NextJS
+- [Laravel Sanctum v2.15] - Herramienta de Laravel para Autenticación API
+
+#### Frontend:
+- [Next JS v12.0.4] - Framework SSR de reactJS (Especial para SEO)
+- [React v.17.0.2] - Libreria de Javascript
+- [Tailwind CSS v3.0.22] - Framework de CSS y SASS.
+- [Sweet Alert v.11.4.17] - Biblioteca de alerts y popups
+- [React Infinite Scroll Component v6.1.0] - Componente para Infinite Scroll
+- [Axios v0.21.1] - Cliente HTTP javascript
+- [SWR v.1.2.2] - Hook para generar peticiones CSR
+
+And of course Dillinger itself is open source with a [public repository][dill]
+ on GitHub.
+
+## Instalación
+
+Desafio Raya requiere [Composer](https://getcomposer.org/download) v2+ y [Node](https://nodejs.org) para instalar la aplicación.
+Además se debe contar con una base de datos MYSQL la cual se debe llamar _desafioraya_.
+
+Para instalar la aplicación debes correr los siguientes comandos en tu consola.
+
+```sh
+git clone https://github.com/infortran/desafio-raya.git
+cd desafio-raya
+composer install
+cp .env.example .env
+php artisan key:generate
 php artisan breeze:install api
 ```
+Ya una vez copiado nuestro archivo .env, debemos editarlo para que la base de datos y las URL del Frontend comiencen a funcionar:
+```sh
+APP_URL=http://localhost:8000
+FRONTEND_URL=http://localhost:3000
+```
+```sh
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=desafioraya
+DB_USERNAME=root (reemplazar por los datos de tu MySQL)
+DB_PASSWORD=
+```
+Teniendo configurada nuestra base de datos debemos migrar las tablas de la base de datos la cual incluye las tablas de Regiones Provincias y Comunas, y luego poner a trabajar el server local:
 
-Next, ensure that your application's `APP_URL` and `FRONTEND_URL` environment variables are set to `http://localhost:8000` and `http://localhost:3000`, respectively.
-
-After defining the appropriate environment variables, you may serve the Laravel application using the `serve` Artisan command:
-
-```bash
-# Serve the application...
+```sh
+php artisan migrate --seed
 php artisan serve
 ```
+#### Frontend
+Para instalar las dependencias del Frontend debes correr en tu consola:
 
-Next, clone this repository and install its dependencies with `yarn install` or `npm install`. Then, copy the `.env.example` file to `.env.local` and supply the URL of your backend:
-
-```
-NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
-```
-
-Finally, run the application via `npm run dev`. The application will be available at `http://localhost:3000`:
-
-```
+```sh
+cd frontend
+npm i
 npm run dev
 ```
 
-> Note: Currently, we recommend using `localhost` during local development of your backend and frontend to avoid CORS "Same-Origin" issues.
-
-### Authentication Hook
-
-This Next.js application contains a custom `useAuth` React hook, designed to abstract all authentication logic away from your pages. In addition, the hook can be used to access the currently authenticated user:
-
-```js
-const ExamplePage = () => {
-    const { logout, user } = useAuth({ middleware: 'auth' })
-
-    return (
-        <>
-            <p>{user?.name}</p>
-
-            <button onClick={logout}>Sign out</button>
-        </>
-    )
-}
-
-export default ExamplePage
+en la carpeta Frontend debes hacer una copia del archivo .env.example y renombrarlo como .env.local, dentro del archivo debes escribir lo siguiente:
 ```
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+```
+Y listo :D
 
-> Note: You will need to use [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`user?.name` instead of `user.name`) when accessing properties on the user object to account for Next.js's initial server-side render.
-
-## Contributing
-
-Thank you for considering contributing to Breeze Next! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-Please review [our security policy](https://github.com/laravel/breeze-next/security/policy) on how to report security vulnerabilities.
-
-## License
-
-Laravel Breeze Next is open-sourced software licensed under the [MIT license](LICENSE.md).
+Con esto la aplicación ya deberia correr sin problemas...
+Desarrollado Por Freddy Perez P.
