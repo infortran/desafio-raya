@@ -31,8 +31,7 @@ Este proyecto fue desarrollado con el siguiente stack:
 - [Axios v0.21.1] - Cliente HTTP javascript
 - [SWR v.1.2.2] - Hook para generar peticiones CSR
 
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
+
 
 ## Instalación
 
